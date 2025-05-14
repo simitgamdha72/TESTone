@@ -30,7 +30,15 @@ public class HomeController : Controller
     {
         if (User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("DashBoard", "Home");
+            if (User.Claims.Any(c => c.Value == "admin"))
+            {
+                return RedirectToAction("DashBoard", "Home");
+            }
+            else
+            {
+                return RedirectToAction("UserProfile", "Home");
+            }
+
         }
 
         string? cookie = Convert.ToString(User.FindFirstValue(ClaimTypes.Email));
@@ -48,7 +56,15 @@ public class HomeController : Controller
         }
         else
         {
-            return RedirectToAction("DashBoard", "Home");
+            if (user.Role == "admin")
+            {
+                return RedirectToAction("DashBoard", "Home");
+            }
+            else
+            {
+                return RedirectToAction("UserProfile", "Home");
+            }
+
         }
 
     }
@@ -112,12 +128,28 @@ public class HomeController : Controller
 
                });
 
-        return RedirectToAction("DashBoard", "Home");
+        if (user.Role == "admin")
+        {
+            return RedirectToAction("DashBoard", "Home");
+        }
+        else
+        {
+            return RedirectToAction("UserProfile", "Home");
+        }
+
+
     }
 
     [Authorize]
     [Authorize(Roles = "admin")]
     public IActionResult DashBoard()
+    {
+        return View();
+    }
+
+    [Authorize]
+    [Authorize(Roles = "user")]
+    public IActionResult UserProfile()
     {
         return View();
     }
