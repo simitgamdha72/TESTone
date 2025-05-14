@@ -14,14 +14,12 @@ namespace TestProject.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
     private readonly IConfiguration _configuration;
 
     private readonly TestProjectContext _context;
 
-    public HomeController(ILogger<HomeController> logger, IConfiguration configuration, TestProjectContext Context)
+    public HomeController(IConfiguration configuration, TestProjectContext Context)
     {
-        _logger = logger;
         _configuration = configuration;
         _context = Context;
     }
